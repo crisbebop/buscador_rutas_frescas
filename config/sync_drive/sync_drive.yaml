@@ -1,0 +1,14 @@
+
+google_drive:
+  file_extensions: [".geojson", ".tif"]
+  name_contains: ["buildings_height", "ndvi", "lst"]
+
+auth:
+  credentials_path: "secrets/google_oauth_credentials.json"
+  token_path: "secrets/google_oauth_token.json"
+
+local:
+  target_dir: "data/reference/gee"
+
+sync:
+  overwrite: false
