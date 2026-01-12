@@ -1,4 +1,3 @@
-# src/utils/config.py
 from pathlib import Path
 import yaml
 
