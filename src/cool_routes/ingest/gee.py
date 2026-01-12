@@ -210,9 +210,9 @@ def export_feature_collection_to_drive(
     fc: ee.FeatureCollection,
     *,
     description: str,
-    folder: str,
     filename_prefix: str,
     file_format: str = "GeoJSON",
+    folder: str | None = None,
 ) -> ee.batch.Task:
     """
     Export FeatureCollection to Google Drive.
@@ -222,14 +222,17 @@ def export_feature_collection_to_drive(
     ee.batch.Task
         Started export task.
     """
-    task = ee.batch.Export.table.toDrive(
+    kwargs = dict(
         collection=fc,
         description=description,
-        folder=folder,
         fileNamePrefix=filename_prefix,
         fileFormat=file_format,
     )
 
+    if folder:
+        kwargs["folder"] = folder
+
+    task = ee.batch.Export.table.toDrive(**kwargs)
     task.start()
     return task
 
@@ -237,23 +240,27 @@ def export_image_to_drive(
     image: ee.Image,
     *,
     description: str,
-    folder: str,
     filename_prefix: str,
     region: ee.Geometry,
     scale: int,
     crs: str,
+    folder: str | None = None,
 ) -> ee.batch.Task:
     """Export raster image (e.g. NDVI) to Google Drive."""
-    task = ee.batch.Export.image.toDrive(
+    kwargs = dict(
         image=image,
         description=description,
-        folder=folder,
         fileNamePrefix=filename_prefix,
         region=region,
         scale=scale,
         crs=crs,
         maxPixels=1e13,
     )
+
+    if folder:
+        kwargs["folder"] = folder
+
+    task = ee.batch.Export.image.toDrive(**kwargs)
     task.start()
     return task
 

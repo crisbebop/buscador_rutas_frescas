@@ -16,7 +16,7 @@ dataset:
   scale_meters: 4
 
 export:
-  drive_folder: "GEE_Exports"
+  drive_folder: null
   file_format: "GeoJSON"
 
   # Metadatos para el nombre del archivo

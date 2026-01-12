@@ -33,6 +33,9 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 CONFIG_DIR = BASE_DIR / "config" / "gee"
 REGIONS_DIR = BASE_DIR / "config" / "regions"
 
+# =================================================
+# Pipeline
+# =================================================
 
 def main(region_slug: str):
     # ---- Logging
@@ -103,12 +106,13 @@ def main(region_slug: str):
     export_feature_collection_to_drive(
         fc=reduced_fc,
         description=filename,
-        folder=export_cfg["export"]["drive_folder"],
+        folder = export_cfg["export"].get("drive_folder"),
         filename_prefix=filename,
         file_format=export_cfg["export"]["file_format"],
     )
 
     logger.info("Building height export pipeline finished successfully")
+    logger.info("Check Google Earth Engine Tasks and Google Drive")
 
 
 if __name__ == "__main__":
