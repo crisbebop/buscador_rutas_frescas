@@ -1,0 +1,54 @@
+# -------------------------------------------------
+# Google Earth Engine Configuration
+# -------------------------------------------------
+gee:
+  project_id: "proyecto-2023-407915"
+
+# -------------------------------------------------
+# Region of Interest (ROI)
+# -------------------------------------------------
+region:
+  place_name: "Quilicura, Santiago, Chile"
+  region_slug: "quilicura" 
+  fallback_polygon:
+    - [-70.78, -33.33]
+    - [-70.72, -33.33]
+    - [-70.72, -33.27]
+    - [-70.78, -33.27]
+    - [-70.78, -33.33]
+
+# -------------------------------------------------
+# Dataset & Processing
+# -------------------------------------------------
+dataset:
+  collection_id: "COPERNICUS/S2_SR_HARMONIZED"
+  start_date: "2023-01-01"
+  end_date: "2023-12-31"
+  nir_band: "B8"
+  red_band: "B4"
+  reducer: "mean"   # mean | median | p90
+
+  cloud_mask:
+    enabled: true
+    cloud_probability_band: "MSK_CLDPRB"
+    threshold: 20
+
+# -------------------------------------------------
+# Export Settings
+# -------------------------------------------------
+export:
+  # Parámetros técnicos
+  drive_folder: "GEE_Exports_NDVI"
+  file_format: "GeoTIFF"
+  scale_meters: 10
+  crs: "EPSG:32719" # UTM 19S (Santiago)
+
+  # Metadatos para el nombre del archivo
+  metadata:
+    product: "ndvi"
+    temporal: "annual"
+    year: 2023
+    resolution: "10m"
+    version: "v1"
+
+  filename_pattern: "{product}_{region_slug}_{temporal}_{year}_{resolution}_{version}"

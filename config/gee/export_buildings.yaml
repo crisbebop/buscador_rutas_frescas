@@ -1,0 +1,30 @@
+# -------------------------------------------------
+# Google Earth Engine Configuration
+# -------------------------------------------------
+gee:
+  project_id: "proyecto-2023-407915"  
+
+# -------------------------------------------------
+# Dataset de edificios (GEE)
+# -------------------------------------------------
+dataset:
+  collection_id: "GOOGLE/Research/open-buildings-temporal/v1"
+  height_band: "building_height"
+  confidence_band: "building_presence"
+  year: 2023
+  confidence_threshold: 0.5
+  scale_meters: 4
+
+export:
+  drive_folder: "GEE_Exports"
+  file_format: "GeoJSON"
+
+  # Metadatos para el nombre del archivo
+  metadata:
+    product: "buildings_height"
+    temporal: "annual"
+    year: 2023
+    resolution: "15m" # el dataset sin procesar tiene resolución de 15m
+    version: "v1"
+
+  filename_pattern: "{product}_{region_slug}_{temporal}_{year}_{resolution}_{version}"

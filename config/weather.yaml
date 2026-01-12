@@ -1,0 +1,16 @@
+drive:
+  folder_name: "gee_exports"
+  filename: "buildings_height_v1.geojson"
+
+local:
+  target_dir: "data/reference/buildings_height"
+
+validation:
+  min_size_kb: 50
+  allowed_extensions: [".geojson"]
+
+metadata:
+  dataset_name: "buildings_height"
+  source: "Google Earth Engine"
+  description: "Altura de edificaciones derivada desde GEE"
+  crs: "EPSG:4326"

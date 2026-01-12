@@ -1,0 +1,12 @@
+region:
+  place_name: "Quilicura, Santiago, Chile"
+  region_slug: "quilicura"
+  source: "osmnx"  # osmnx | manual
+
+  # Polígono de respaldo (lon, lat)
+  fallback_polygon:
+    - [-70.78, -33.33]
+    - [-70.72, -33.33]
+    - [-70.72, -33.27]
+    - [-70.78, -33.27]
+    - [-70.78, -33.33]

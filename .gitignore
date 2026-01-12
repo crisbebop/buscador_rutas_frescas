@@ -1,0 +1,8 @@
+credentials/
+data/
+secrets/
+*.docx
+*.doc
+notas.txt
+__pycache__/
+*.pyc

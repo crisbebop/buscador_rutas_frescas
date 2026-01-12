@@ -1,0 +1,51 @@
+# -------------------------------------------------
+# Google Earth Engine Configuration
+# -------------------------------------------------
+gee:
+  project_id: "proyecto-2023-407915"
+
+# -------------------------------------------------
+# Region of Interest (ROI)
+# -------------------------------------------------
+region:
+  place_name: "Quilicura, Santiago, Chile"
+  region_slug: "quilicura" 
+  fallback_polygon:
+    - [-70.78, -33.33]
+    - [-70.72, -33.33]
+    - [-70.72, -33.27]
+    - [-70.78, -33.27]
+    - [-70.78, -33.33]
+
+# -------------------------------------------------
+# LST Dataset (Landsat 8/9 Surface Temperature)
+# -------------------------------------------------
+dataset:
+  #collection_id: "LANDSAT/LC08/C02/T1_L2"
+  start_date: "2023-01-01"
+  end_date: "2023-12-31"
+  reducer: "median"   # mean | median | p90
+
+  cloud_mask:
+    enabled: true
+
+# -------------------------------------------------
+# Export Settings
+# -------------------------------------------------
+export:
+  # Parámetros técnicos
+  drive_folder: "GEE_Exports_LST"
+  file_format: "GeoTIFF"
+  scale_meters: 30
+  crs: "EPSG:32719" # UTM 19S (Santiago)
+
+  # Metadatos para el nombre del archivo
+  metadata:
+    product: "lst"
+    temporal: "annual"
+    year: 2023
+    resolution: "30m"
+    version: "v1"
+    unit: "Celsius"
+
+  filename_pattern: "{product}_{region_slug}_{temporal}_{year}_{resolution}_{version}"
