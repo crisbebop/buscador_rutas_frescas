@@ -1,8 +1,14 @@
 credentials/
 data/
 secrets/
+cache/
 *.docx
 *.doc
 notas.txt
 __pycache__/
 *.pyc
+# Entornos virtuales
+.venv/
+venv/
+env/
+
