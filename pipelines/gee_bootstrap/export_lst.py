@@ -12,6 +12,9 @@ from pathlib import Path
 import logging
 import yaml
 
+from cool_routes.utils.load_yaml import load_yaml
+from cool_routes.utils.log_config import configure_logging
+
 from cool_routes.ingest.gee import (
     init_gee,
     get_roi,
@@ -28,44 +31,45 @@ from cool_routes.ingest.gee import (
 # =================================================
 
 BASE_DIR = Path(__file__).resolve().parents[2]
-CONFIG_PATH = BASE_DIR / "config" / "gee" / "export_lst.yaml"
 
-
-def load_config(path: Path) -> dict:
-    with open(path, "r", encoding="utf-8") as f:
-        return yaml.safe_load(f)
-
-
-def setup_logging(level: str = "INFO") -> None:
-    logging.basicConfig(
-        level=level,
-        format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
-    )
-
+CONFIG_DIR = BASE_DIR / "config" / "gee"
+REGIONS_DIR = BASE_DIR / "config" / "regions"
 
 # =================================================
 # Pipeline
 # =================================================
 
-def main() -> None:
-    config = load_config(CONFIG_PATH)
-    setup_logging(config.get("log_level", "INFO"))
-    logger = logging.getLogger("export_lst")
+def main(region_slug):
+    # ---- Logging
+    configure_logging("INFO")
+    logger = logging.getLogger(__name__)
 
-    logger.info("Starting LST export pipeline")
+    # ---- Load configs
+    # Levanta error si no encuentra region_slug
+    region_path = REGIONS_DIR / f"{region_slug}.yaml"
+    if not region_path.exists():
+        raise ValueError(
+            f"Region '{region_slug}' not found. "
+            f"Expected file: {region_path.name}"
+        )
+    
+    region_cfg = load_yaml(region_path)
+    export_cfg = load_yaml(CONFIG_DIR / "export_lst.yaml")
+    #globals_cfg = load_yaml(BASE_DIR / "config/globals.yaml")
 
     # ---- Initialize GEE
-    init_gee(project_id=config["gee"]["project_id"])
+    logger.info("Initializing Google Earth Engine")
+    init_gee(project_id=export_cfg["gee"]["project_id"])
 
     # ---- ROI
     logger.info("Resolving region of interest (ROI)")
     roi = get_roi(
-        place_name=config["region"]["place_name"],
-        fallback_coords=config["region"]["fallback_polygon"],
+        place_name=region_cfg["region"]["place_name"],
+        fallback_coords=region_cfg["region"]["fallback_polygon"],
     )
 
     # ---- LST
-    lst_config = config["dataset"]
+    lst_config = export_cfg["dataset"]
 
     collection = load_landsat8_lst_collection(
     start_date=lst_config["start_date"],
@@ -88,28 +92,27 @@ def main() -> None:
     lst_image = build_lst_composite(
         collection=processed,
         roi=roi,
-        reducer=config["dataset"]["reducer"],
+        reducer=lst_config["reducer"],
     )
 
     # ---- Export
+    meta = {
+        **export_cfg["export"]["metadata"],
+        "region_slug": region_cfg["region"]["region_slug"],
+    }
 
-    export_cfg = config["export"]
+    filename = export_cfg["export"]["filename_pattern"].format(**meta)
 
-    # Extraer metadatos
-    meta = config['export']['metadata']
-    meta['region_slug'] = config['region']['region_slug']
-
-    # Construir el nombre usando el patrón
-    file_name_prefix = config['export']['filename_pattern'].format(**meta)
+    logger.info(f"Exporting {filename} to Google Drive")
 
     export_image_to_drive(
         image=lst_image,
-        description=file_name_prefix,
-        folder=export_cfg["drive_folder"],
-        filename_prefix=file_name_prefix,
+        description=filename,
+        folder=export_cfg["export"].get("drive_folder"),
+        filename_prefix=filename,
         region=roi,
-        scale=export_cfg["scale_meters"],
-        crs=export_cfg.get("crs", "EPSG:4326"),
+        scale=export_cfg["export"]["scale_meters"],
+        crs=export_cfg["export"].get("crs", "EPSG:4326"),
     )
 
     logger.info("lst_image export task submitted successfully")
@@ -121,4 +124,10 @@ def main() -> None:
 # ---------------------------------------------------------------------
 
 if __name__ == "__main__":
-    main()
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--region", required=True)
+    args = parser.parse_args()
+
+    main(args.region)

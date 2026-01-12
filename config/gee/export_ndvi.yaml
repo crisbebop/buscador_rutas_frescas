@@ -5,19 +5,6 @@ gee:
   project_id: "proyecto-2023-407915"
 
 # -------------------------------------------------
-# Region of Interest (ROI)
-# -------------------------------------------------
-region:
-  place_name: "Quilicura, Santiago, Chile"
-  region_slug: "quilicura" 
-  fallback_polygon:
-    - [-70.78, -33.33]
-    - [-70.72, -33.33]
-    - [-70.72, -33.27]
-    - [-70.78, -33.27]
-    - [-70.78, -33.33]
-
-# -------------------------------------------------
 # Dataset & Processing
 # -------------------------------------------------
 dataset:
@@ -37,8 +24,7 @@ dataset:
 # Export Settings
 # -------------------------------------------------
 export:
-  # Parámetros técnicos
-  drive_folder: "GEE_Exports_NDVI"
+  drive_folder: null
   file_format: "GeoTIFF"
   scale_meters: 10
   crs: "EPSG:32719" # UTM 19S (Santiago)

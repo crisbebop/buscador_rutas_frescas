@@ -5,19 +5,6 @@ gee:
   project_id: "proyecto-2023-407915"
 
 # -------------------------------------------------
-# Region of Interest (ROI)
-# -------------------------------------------------
-region:
-  place_name: "Quilicura, Santiago, Chile"
-  region_slug: "quilicura" 
-  fallback_polygon:
-    - [-70.78, -33.33]
-    - [-70.72, -33.33]
-    - [-70.72, -33.27]
-    - [-70.78, -33.27]
-    - [-70.78, -33.33]
-
-# -------------------------------------------------
 # LST Dataset (Landsat 8/9 Surface Temperature)
 # -------------------------------------------------
 dataset:
@@ -34,7 +21,7 @@ dataset:
 # -------------------------------------------------
 export:
   # Parámetros técnicos
-  drive_folder: "GEE_Exports_LST"
+  drive_folder: null
   file_format: "GeoTIFF"
   scale_meters: 30
   crs: "EPSG:32719" # UTM 19S (Santiago)
