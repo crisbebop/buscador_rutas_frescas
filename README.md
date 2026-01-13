@@ -2,9 +2,11 @@
 
 ## Motivación del proyecto
 
-Chile y el mundo enfrentan un alza de temperatura. Las proyeciones indican temperaturas máximas por sobre los 35ºC en el futuro inmediato ([simuladores.cr2.cl](https://simulaciones.cr2.cl/)). Esto, combinado con la falta de áreas verdes en algunas comunas, crean un escenario en el cual caminar por la ciudad puede resultar en una experiencia desalentadora, dando paso a preferir circular en automóvil, incluso para traslados muy cortos.
+Chile y el mundo enfrentan un alza de temperatura. Las proyeciones indican temperaturas máximas por sobre los 35ºC en el futuro inmediato ([simuladores.cr2.cl](https://simulaciones.cr2.cl/)). Esto, combinado con la falta de áreas verdes en algunas comunas, crean un escenario en el cual, caminar por la ciudad puede resultar en una experiencia desalentadora, dando paso a preferir circular en automóvil, incluso para traslados muy cortos.
 
 **cool-routes** es un proyecto en desarrollo con un enfoque de **Machine Learning**, cuyo propósito es es construir una **aplicación que permita recomendar rutas peatonales “más frescas”**, combinando información geoespacial y variables ambientales derivadas desde **Google Earth Engine (GEE)** (datos estáticos de referencia), APIs de estaciones meteorológicas, proyecciones de sombra sobre las veredas y preferencias del usuario (datos dinámicos).
+
+![alt text](image.png)
 
 En esta etapa se documenta un **avance técnico inicial**, centrado en diseñar un flujo **robusto, modular y reproducible** para la generación, exportación y sincronización de datos.
 
