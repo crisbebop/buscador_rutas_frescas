@@ -6,7 +6,7 @@ Chile y el mundo enfrentan un alza de temperatura. Las proyeciones indican tempe
 
 **cool-routes** es un proyecto en desarrollo con un enfoque de **Machine Learning**, cuyo propósito es es construir una **aplicación que permita recomendar rutas peatonales “más frescas”**, combinando información geoespacial y variables ambientales derivadas desde **Google Earth Engine (GEE)** (datos estáticos de referencia), APIs de estaciones meteorológicas, proyecciones de sombra sobre las veredas y preferencias del usuario (datos dinámicos).
 
-![alt text](image.png)
+![](img/Imagen1.png)
 
 En esta etapa se documenta un **avance técnico inicial**, centrado en diseñar un flujo **robusto, modular y reproducible** para la generación, exportación y sincronización de datos.
 
