@@ -9,6 +9,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
 from google.auth.transport.requests import Request
+from google.auth.exceptions import RefreshError
 
 from cool_routes.utils.load_yaml import load_yaml
 from cool_routes.utils.log_config import configure_logging
@@ -25,16 +26,26 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 
 CONFIG_DIR = BASE_DIR / "config" / "sync_drive"
 
+
 def authenticate(credentials_path: str, token_path: str):
     creds = None
 
     if os.path.exists(token_path):
-        creds = Credentials.from_authorized_user_file(token_path, SCOPES)
+        try:
+            creds = Credentials.from_authorized_user_file(token_path, SCOPES)
+        except RefreshError:
+            os.remove(token_path)
+            creds = None
 
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
+            try:
+                creds.refresh(Request())
+            except RefreshError:
+                os.remove(token_path)
+                creds = None
+
+        if not creds:
             flow = InstalledAppFlow.from_client_secrets_file(
                 credentials_path, SCOPES
             )

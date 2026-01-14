@@ -8,7 +8,7 @@ auth:
   token_path: "secrets/google_oauth_token.json"
 
 local:
-  target_dir: "data/reference/gee"
+  target_dir: "data/reference"
 
 sync:
   overwrite: false
