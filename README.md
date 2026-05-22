@@ -4,7 +4,9 @@
 
 Chile y el mundo enfrentan un alza de temperatura. Las proyeciones indican temperaturas máximas por sobre los 35ºC en el futuro inmediato ([simuladores.cr2.cl](https://simulaciones.cr2.cl/)). Esto, combinado con la falta de áreas verdes en algunas comunas, crean un escenario en el cual, caminar por la ciudad puede resultar en una experiencia desalentadora, dando paso a preferir circular en automóvil, incluso para traslados muy cortos.
 
-**cool-routes** es un proyecto en desarrollo con un enfoque de **Machine Learning**, cuyo propósito es es construir una **aplicación que permita recomendar rutas peatonales “más frescas”**, combinando información geoespacial y variables ambientales derivadas desde **Google Earth Engine (GEE)** (datos estáticos de referencia), APIs de estaciones meteorológicas, proyecciones de sombra sobre las veredas y preferencias del usuario (datos dinámicos).
+**cool-routes** es un proyecto en desarrollo cuyo propósito es construir **una aplicación capaz de recomendar rutas peatonales “más frescas”**, combinando información geoespacial y variables ambientales derivadas desde **Google Earth Engine** —como temperatura superficial (LST), NDVI y cobertura de sombra— junto con datos dinámicos provenientes de APIs de estaciones meteorológicas y preferencias del usuario.
+
+El enfoque actual consiste en utilizar estas variables ambientales para **estimar índices biometeorológicos de confort térmico**, como la **Temperatura Equivalente Fisiológica (PET)**, e incorporarlos dentro de una función de costo utilizada por algoritmos de ruteo sobre grafos, como Dijkstra's algorithm.
 
 ![](img/Imagen1.png)
 
@@ -85,9 +87,11 @@ cool_routes/
 │   │   ├── gee_id.yaml           # Id del proyecto en GEE
 │   ├── regions/                  # Áreas de interés (ROI)
 │   ├── sync_drive/  
+│       ├── sync_drive.yaml
 |           
 │
 ├── notebooks/                    # Notebooks demostrativos (en construcción)
+├── secrets/                      # Maneja credenciales de Google, No se versiona
 │
 ├── pyproject.toml                # Gestión de dependencias (Poetry)
 ├── README.md
@@ -175,22 +179,18 @@ Ver archivo de configuración en `config/sync_drive/sync_drive.yaml`
 
 ### 4. Ejecutar Pipelines  
 Hay 4 pipelines a ejecutar, la responsabilidad de cada uno es:  
-1. `export_buildings.py`-> Orquesta la extracción de altura de edificios en formato `shapefile`.    
+1. `export_buildings.py`-> Orquesta la extracción de altura de edificios en formato `.geojson`.    
 2. `export_lst.py`-> Orquesta la extracción de temperatura del suelo (LST: _Land Surface Temperature_) en formato `.tif`.  
 3. `export_ndvi.py`-> Orquesta la extracción del Índice de Vegetación Normalizada (NDVI : _Normalized Difference Vegetation Index_) en formato `.tif`  
+4. `sync_drive.py`-> Autenticación en Google Drive, búsqueda y descarga de los archivos creados.  
 
-
-Normalized Difference Vegetation Index
-
-Para ejecutar el pipeline, se debe haber configurado previamente las credenciales  OAuth para Google Drive y Google Earth Engine (tutorial en construcción)
-
-Archivos esperados (no versionados):
-
-```text
-credentials.json
-token.json   # se genera automáticamente tras la primera autenticación
+```bash
+# Ejecución en una terminal
+poetry run python pipelines/gee_bootstrap/export_buildings.py --region quilicura # Usar el ROI deseado, configurar en /config/regions  
+poetry run python pipelines/gee_bootstrap/export_ndvi.py --region quilicura  
+poetry run python pipelines/gee_bootstrap/export_lst.py --region quilicura  
+poetry run python pipelines/gee_bootstrap/sync_drive.py  
 ```
-
 ---
 
 ## Stack
