@@ -50,12 +50,13 @@ def main(region_slug: str):
         )
     
     region_cfg = load_yaml(region_path)
+    gee_id_pry = load_yaml(CONFIG_DIR / "gee_id.yaml")
     export_cfg = load_yaml(CONFIG_DIR / "export_ndvi.yaml")
     #globals_cfg = load_yaml(BASE_DIR / "config/globals.yaml")
 
     # ---- Initialize GEE
     logger.info("Starting Google Earth Engine")
-    init_gee(project_id=export_cfg["gee"]["project_id"])
+    init_gee(project_id=gee_id_pry["gee"]["project_id"])
 
     # ---- ROI
     logger.info("Resolving region of interest (ROI)")

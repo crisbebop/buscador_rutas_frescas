@@ -1,0 +1,5 @@
+# -------------------------------------------------
+# Google Earth Engine Configuration
+# -------------------------------------------------
+gee:
+  project_id: "mi-proyecto-gcp"

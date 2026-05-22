@@ -8,6 +8,8 @@ authors = [
 license = {text = "MIT"}
 readme = "README.md"
 requires-python = "^3.11"
+
+packages = [{ include = "cool_routes", from = "src" }]
 dependencies = [
     "geopandas (>=1.1.2,<2.0.0)",
     "folium (>=0.20.0,<0.21.0)",
