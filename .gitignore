@@ -2,6 +2,7 @@ credentials/
 data/
 secrets/
 cache/
+config/gee/gee_id.yaml
 *.docx
 *.doc
 notas.txt
