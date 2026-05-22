@@ -1,0 +1,12 @@
+region:
+  place_name: "Las Condes, Santiago, Chile"
+  region_slug: "las_condes"
+  source: "osmnx"  # osmnx | manual
+
+  # Polígono de respaldo (lon, lat)
+  fallback_polygon:
+    - [-70.60, -33.45]
+    - [-70.48, -33.45]
+    - [-70.48, -33.32]
+    - [-70.60, -33.32]
+    - [-70.60, -33.45]
