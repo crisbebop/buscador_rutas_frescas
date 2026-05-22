@@ -82,6 +82,7 @@ cool_routes/
 │   │   ├── export_buildings.yaml
 │   │   ├── export_ndvi.yaml
 │   │   ├── export_lst.yaml
+│   │   ├── gee_id.yaml           # Id del proyecto en GEE
 │   ├── regions/                  # Áreas de interés (ROI)
 │   ├── sync_drive/  
 |           
@@ -105,12 +106,12 @@ cool_routes/
 
 ---
 
-## Ejecución del pipeline
+## Instrucciones
 
 ### 1. Clonar el repositorio
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/crisbebop/buscador_rutas_frescas.git
 cd cool_routes
 ```
 
@@ -118,11 +119,68 @@ cd cool_routes
 
 ```bash
 poetry install
+```  
+Este comando instalará todas las dependencias definidas en `pyproject.toml` y creará un entorno virtual asociado al proyecto.   
+Si utilizas VSCode, selecciona el intérprete de Python del entorno virtual del proyecto:  
+Presiona ```Ctrl + Shift + P```  
+Busca ```Python: Select Interpreter```  
+Selecciona el intérprete ubicado dentro de la carpeta ```.venv``` ```(.venv/Scripts/python.exe en Windows)```  
+
+### 3. Configurar GEE
+
+#### 3.1 Id del proyecto
+
+El proyecto utiliza imágenes descargadas directamente desde GEE, por lo que se debe tener una cuenta activa y un proyecto creado.  
+Con el id del proyecto se debe crear el archivo de configuración correspondiente  
+```config/gee/gee_id.yaml```  
+
+```bash
+# -------------------------------------------------
+# Google Earth Engine Configuration
+# -------------------------------------------------
+gee:
+  project_id: "mi-proyecto-gcp"
 ```
+Esto vinculará el id de GEE para los pipelines para extracción de alturas, obtención de temperatura del suelo y obtención del índice de vegetación normalizado.  
+```bash
+export_buidldings.py  
+export_lst.py
+export_ndvi.py
+```
+#### 3.2 Área de Interés (ROI)
 
-Esto instalará todas las dependencias definidas en `pyproject.toml` y utilizará el entorno virtual asociado al proyecto.
+En ```config/regions``` se encuentran archivos `.yaml` que contienen la información de los límites comunales a ser utilizadas en los pipelines.  
+Por el momento se cuenta con _Las Condes_ y _Quilicura_. Se pueden añadir las comunas necesarias.  
 
-### 3. Verificar autenticación
+#### 3.3 Autenticarse en Google
+
+Una vez que se ejcutan los pipelines `export_buidldings.py`, `export_lst.py`, `export_ndvi.py`, los archivos generados son enviados al root de Google Drive asociado a la cuenta de Google Earth Engine. El paso de autenticarse en Goolge se utiliza para sincronizar y descargar estos archivos en la carpeta `/data/reference`, de todas formas se puede hacer de forma manual.  
+Para realizar la sincronización se requiere descargar las credenciales de Google y guardarlas en la carpeta `root/secrets/`.  
+En general, el flujo es:  
+**Paso 1. Crear OAuth Client en Google Cloud**  
+APIs&Services -> Credentials -> Create OAuth Client ID  
+**Paso 2. Descargar JSON**  
+`client_secret_XXXXXXXX.json`  
+**Paso 3. Renombrar**  
+`google_oauth_credentials.json`  
+**Paso 4. Guardarlo**  
+En la carpeta (dentro de `/cool_routes`) es decir, `cool_routes/secrets/`  
+
+Una vez guardada la credencial, se podrá ejecutar el pipeline `sync_drive.py`, el cual leerá leerá las credenciales y sincronizará los archivos generados por GEE y guardados en Google Drive.  
+Tras la primera ejecución, pedirá confirmación desde el nevagador web.  
+Luego se generará y guardará el "token" `google_oauth_token.json` en la misma carpeta `/secrets` y no volverá a pedir confirmación, en ejecuciones posteriores.  
+Ver archivo de configuración en `config/sync_drive/sync_drive.yaml`  
+<mark>IMPORTANTE</mark>: estas credenciales __NO deben ser compartidas por ningún motivo__.
+
+
+### 4. Ejecutar Pipelines  
+Hay 4 pipelines a ejecutar, la responsabilidad de cada uno es:  
+1. `export_buildings.py`-> Orquesta la extracción de altura de edificios en formato `shapefile`.    
+2. `export_lst.py`-> Orquesta la extracción de temperatura del suelo (LST: _Land Surface Temperature_) en formato `.tif`.  
+3. `export_ndvi.py`-> Orquesta la extracción del Índice de Vegetación Normalizada (NDVI : _Normalized Difference Vegetation Index_) en formato `.tif`  
+
+
+Normalized Difference Vegetation Index
 
 Para ejecutar el pipeline, se debe haber configurado previamente las credenciales  OAuth para Google Drive y Google Earth Engine (tutorial en construcción)
 

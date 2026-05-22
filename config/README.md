@@ -5,7 +5,7 @@
 ```poetry install```
 3. Configurar GEE  
 Debes tener una cuenta de Google Earth Engine y crear un proyecto, luego en  
-```config/gee/``` 
+```config/gee/```  
 Crear el archivo gee.yaml que contiene el id del proyecto en Google Earth Engine
 ```config/gee/gee_id.yaml```  
 Usa el archivo de ejemplo para crear ```gee_id.yaml```  
