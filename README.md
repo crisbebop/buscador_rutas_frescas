@@ -91,7 +91,7 @@ cool_routes/
 |           
 │
 ├── notebooks/                    # Notebooks demostrativos (en construcción)
-├── secrets/                      # Maneja credenciales de Google, No se versiona
+├── secrets/                      # Guarda credenciales de Google, No se versiona
 │
 ├── pyproject.toml                # Gestión de dependencias (Poetry)
 ├── README.md
