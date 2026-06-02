@@ -1,0 +1,16 @@
+datetime:
+  timezone: "America/Santiago"
+
+  year: 2026
+  month: 1
+  day: 13
+
+  hour: 15
+  minute: 0
+
+location:
+  latitude: -33.45
+  longitude: -70.65
+
+buildings:
+  height_column: "height"
