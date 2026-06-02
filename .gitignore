@@ -13,3 +13,5 @@ __pycache__/
 venv/
 env/
 papers/
+# Imágenes
+img/image_route_1.png
