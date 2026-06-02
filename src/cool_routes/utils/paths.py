@@ -23,7 +23,6 @@ SRC_DIR = PROJECT_ROOT / "src"
 CONFIG_DIR = PROJECT_ROOT / "config"
 PIPELINES_DIR = PROJECT_ROOT / "pipelines"
 NOTEBOOKS_DIR = PROJECT_ROOT / "notebooks"
-
 DATA_DIR = PROJECT_ROOT / "data"
 
 
@@ -33,6 +32,7 @@ DATA_DIR = PROJECT_ROOT / "data"
 
 REFERENCE_DATA_DIR = DATA_DIR / "reference"
 INTERMEDIATE_DATA_DIR = DATA_DIR / "intermediate"
+PROCESSED_DATA_DIR = DATA_DIR / "processed"
 CACHE_DATA_DIR = DATA_DIR / "cache"
 OUTPUTS_DATA_DIR = DATA_DIR / "outputs"
 
